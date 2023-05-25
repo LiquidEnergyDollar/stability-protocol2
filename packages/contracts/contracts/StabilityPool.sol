@@ -640,7 +640,7 @@ contract StabilityPool is LiquityBase, Ownable, CheckContract, IStabilityPool {
     }
 
     function _requireNoUnderCollateralizedTroves() internal {
-        uint price = priceFeed.fetchPrice();
+        (, uint price) = priceFeed.fetchPrice();
         address lowestTrove = sortedTroves.getLast();
         uint ICR = troveManager.getCurrentICR(lowestTrove, price);
         require(ICR >= MCR, "StabilityPool: Cannot withdraw while there are troves with ICR < MCR");

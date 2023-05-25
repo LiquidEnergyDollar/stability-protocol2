@@ -481,8 +481,8 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
 
         LiquidationTotals memory totals;
 
-        vars.price = priceFeed.fetchPrice();
-        vars.THUSDInStabPool = stabilityPoolCached.getTotalTHUSDDeposits();
+        (, vars.price) = priceFeed.fetchPrice();
+        vars.LUSDInStabPool = stabilityPoolCached.getTotalLUSDDeposits();
         vars.recoveryModeAtStart = _checkRecoveryMode(vars.price);
 
         // Perform the appropriate liquidation sequence - tally the values, and obtain their totals
@@ -623,8 +623,8 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         LocalVariables_OuterLiquidationFunction memory vars;
         LiquidationTotals memory totals;
 
-        vars.price = priceFeed.fetchPrice();
-        vars.THUSDInStabPool = stabilityPoolCached.getTotalTHUSDDeposits();
+        (, vars.price) = priceFeed.fetchPrice();
+        vars.LUSDInStabPool = stabilityPoolCached.getTotalLUSDDeposits();
         vars.recoveryModeAtStart = _checkRecoveryMode(vars.price);
 
         // Perform the appropriate liquidation sequence - tally values and obtain their totals.
@@ -919,7 +919,11 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         RedemptionTotals memory totals;
 
         _requireValidMaxFeePercentage(_maxFeePercentage);
-        totals.price = priceFeed.fetchPrice();
+        _requireAfterBootstrapPeriod();
+        (IPriceFeed.Status priceFeedStatus, uint256 price) = priceFeed.fetchPrice();
+        totals.price = price;
+        // Only allow direct redemption if oracle is stale or disabled
+        _requirePriceFeedInactive(priceFeedStatus);
         _requireTCRoverMCR(totals.price);
         _requireAmountGreaterThanZero(_THUSDamount);
         _requireTHUSDBalanceCoversRedemption(contractsCache.thusdToken, msg.sender, _THUSDamount);
@@ -1468,6 +1472,15 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
     function _requireTCRoverMCR(uint _price) internal view {
         require(_getTCR(_price) >= MCR, "TroveManager: Cannot redeem when TCR < MCR");
     }
+
+    function _requireAfterBootstrapPeriod() internal view {
+        uint systemDeploymentTime = lqtyToken.getDeploymentStartTime();
+        require(block.timestamp >= systemDeploymentTime.add(BOOTSTRAP_PERIOD), "TroveManager: Redemptions are not allowed during bootstrap phase");
+    }
+
+    function _requirePriceFeedInactive(IPriceFeed.Status status) internal view {
+        require(status == IPriceFeed.Status.stale || status == IPriceFeed.Status.disabled, "TroveManager: Redemptions are only allowed if the price feed is stale or disabled");
+    }    
 
     function _requireValidMaxFeePercentage(uint _maxFeePercentage) internal pure {
         require(_maxFeePercentage >= REDEMPTION_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
