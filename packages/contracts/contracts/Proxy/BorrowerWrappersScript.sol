@@ -128,7 +128,7 @@ contract BorrowerWrappersScript is BorrowerOperationsScript, ETHTransferScript, 
 
     }
 
-    function _getNetLUSDAmount(uint _collateral) internal returns (uint) {
+    function _getNetTHUSDAmount(uint _collateral) internal returns (uint) {
         (, uint price) = priceFeed.fetchPrice();
         uint ICR = troveManager.getCurrentICR(address(this), price);
 

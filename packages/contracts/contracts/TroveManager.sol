@@ -482,7 +482,7 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         LiquidationTotals memory totals;
 
         (, vars.price) = priceFeed.fetchPrice();
-        vars.LUSDInStabPool = stabilityPoolCached.getTotalLUSDDeposits();
+        vars.THUSDInStabPool = stabilityPoolCached.getTotalTHUSDDeposits();
         vars.recoveryModeAtStart = _checkRecoveryMode(vars.price);
 
         // Perform the appropriate liquidation sequence - tally the values, and obtain their totals
@@ -624,7 +624,7 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         LiquidationTotals memory totals;
 
         (, vars.price) = priceFeed.fetchPrice();
-        vars.LUSDInStabPool = stabilityPoolCached.getTotalLUSDDeposits();
+        vars.THUSDInStabPool = stabilityPoolCached.getTotalTHUSDDeposits();
         vars.recoveryModeAtStart = _checkRecoveryMode(vars.price);
 
         // Perform the appropriate liquidation sequence - tally values and obtain their totals.
