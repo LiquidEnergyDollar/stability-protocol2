@@ -919,7 +919,6 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
         RedemptionTotals memory totals;
 
         _requireValidMaxFeePercentage(_maxFeePercentage);
-        _requireAfterBootstrapPeriod();
         (IPriceFeed.Status priceFeedStatus, uint256 price) = priceFeed.fetchPrice();
         totals.price = price;
         // Only allow direct redemption if oracle is stale or disabled
@@ -1471,11 +1470,6 @@ contract TroveManager is LiquityBase, Ownable, CheckContract, ITroveManager {
 
     function _requireTCRoverMCR(uint _price) internal view {
         require(_getTCR(_price) >= MCR, "TroveManager: Cannot redeem when TCR < MCR");
-    }
-
-    function _requireAfterBootstrapPeriod() internal view {
-        uint systemDeploymentTime = lqtyToken.getDeploymentStartTime();
-        require(block.timestamp >= systemDeploymentTime.add(BOOTSTRAP_PERIOD), "TroveManager: Redemptions are not allowed during bootstrap phase");
     }
 
     function _requirePriceFeedInactive(IPriceFeed.Status status) internal view {
