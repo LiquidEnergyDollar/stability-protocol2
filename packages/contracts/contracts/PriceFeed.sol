@@ -29,14 +29,6 @@ contract PriceFeed is Ownable, CheckContract, BaseMath, IPriceFeed {
     address borrowerOperationsAddress;
     address troveManagerAddress;
 
-    enum Status {
-        chainlinkWorking,
-        usingTellorChainlinkUntrusted,
-        bothOraclesUntrusted,
-        usingTellorChainlinkFrozen,
-        usingChainlinkTellorUntrusted
-    }
-
     // The current status of the PricFeed, which determines the conditions for the next price fetch attempt
     Status public status;
 
@@ -67,7 +59,7 @@ contract PriceFeed is Ownable, CheckContract, BaseMath, IPriceFeed {
     * it uses the last good price seen by Liquity.
     *
     */
-    function fetchPrice() external override returns (uint) {
-        return 1;
+    function fetchPrice() external override returns (Status, uint) {
+        return (status, 1);
     }
 }
