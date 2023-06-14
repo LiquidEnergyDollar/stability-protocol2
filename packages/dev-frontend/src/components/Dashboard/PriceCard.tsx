@@ -98,7 +98,7 @@ export const DeviationFactorCard = ({ variant = "mainCards" }: SystemStatsProps)
     <Card {...{ variant }} sx={{ display: ['none', 'block'], width:"100%" }}>
       <TopCard
         name={`Deviation Factor`}
-        tooltip={`The accumulated redemption rate of ${ COIN }. Initialized to 1.`} 
+        tooltip={`The accumulated interest rate of ${ COIN } since deployment. Initialized to 1.`} 
         imgSrc="./icons/scale-icon.png"
       >
         

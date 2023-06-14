@@ -32,19 +32,19 @@ export const Dashboard = (): JSX.Element => (
         <Container variant="oneThird">
           <DeviationFactorCard />
         </Container>
-        <Container variant="oneThird">
+        {/* <Container variant="oneThird">
           <BorrowingFee />
-        </Container>
-        <Container variant="oneThird">
+        </Container> */}
+        {/* <Container variant="oneThird">
           <OpenedVaults />
-        </Container>
+        </Container> */}
         <Container variant="oneThird">
           <ColRatio />
         </Container>
         {/* <Container variant="twoThirds">
           <Chart />
         </Container> */}
-        <Container variant="oneThird">
+        <Container variant="full">
           <SystemStatsCard IsPriceEditable={true} />
         </Container>
         <Container variant="half">
