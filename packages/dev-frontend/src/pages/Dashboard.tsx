@@ -1,6 +1,6 @@
 import { Container, Heading } from "theme-ui";
 
-import { PriceCard } from "../components/Dashboard/PriceCard";
+import { RedemptionPriceCard, OraclePriceCard, MarketPriceCard, RedemptionRateCard, DeviationFactorCard } from "../components/Dashboard/PriceCard";
 import { BorrowingFee } from "../components/Dashboard/BorrowingFee";
 import { OpenedVaults } from "../components/Dashboard/OpenedVaults";
 import { ColRatio } from "../components/Dashboard/ColRatio";
@@ -18,7 +18,19 @@ export const Dashboard = (): JSX.Element => (
       </Heading>
       <Container variant="dashboardGrid">
         <Container variant="oneThird">
-          <PriceCard />
+          <RedemptionPriceCard />
+        </Container>
+        <Container variant="oneThird">
+          <OraclePriceCard />
+        </Container>
+        <Container variant="oneThird">
+          <MarketPriceCard />
+        </Container>
+        <Container variant="oneThird">
+          <RedemptionRateCard />
+        </Container>
+        <Container variant="oneThird">
+          <DeviationFactorCard />
         </Container>
         <Container variant="oneThird">
           <BorrowingFee />
@@ -29,9 +41,9 @@ export const Dashboard = (): JSX.Element => (
         <Container variant="oneThird">
           <ColRatio />
         </Container>
-        <Container variant="twoThirds">
+        {/* <Container variant="twoThirds">
           <Chart />
-        </Container>
+        </Container> */}
         <Container variant="oneThird">
           <SystemStatsCard IsPriceEditable={true} />
         </Container>
